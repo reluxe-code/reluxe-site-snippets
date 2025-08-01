@@ -170,3 +170,31 @@ add_action( 'init', function() {
     ] );
 });
 
+/**
+ * Register Monthly Specials CPT
+ */
+add_action( 'init', function() {
+    $labels = [
+        'name'               => 'Monthly Specials',
+        'singular_name'      => 'Monthly Special',
+        'menu_name'          => 'Monthly Specials',
+        'add_new_item'       => 'Add New Monthly Special',
+        'all_items'          => 'All Monthly Specials',
+        'edit_item'          => 'Edit Monthly Special',
+        'view_item'          => 'View Monthly Special',
+        'search_items'       => 'Search Monthly Specials',
+        'not_found'          => 'No specials found.',
+        'not_found_in_trash' => 'No specials found in Trash.',
+    ];
+    register_post_type( 'monthly_special', [
+        'labels'             => $labels,
+        'public'             => true,
+        'has_archive'        => true,
+        'show_ui'            => true,
+        'show_in_rest'       => true,
+        'menu_icon'          => 'dashicons-star-filled',
+        'rewrite'            => [ 'slug' => 'monthly-specials', 'with_front' => true ],
+        'supports'           => [ 'title', 'editor', 'excerpt', 'thumbnail', 'custom-fields' ],
+    ] );
+});
+
