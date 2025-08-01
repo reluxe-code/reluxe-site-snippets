@@ -56,3 +56,60 @@ add_action( 'init', function() {
     ];
     register_post_type( 'locations', $args );
 });
+
+/**
+ * Register Staff CPT
+ */
+add_action( 'init', function() {
+    $labels = [
+        'name'               => 'Staff',
+        'singular_name'      => 'Staff Member',
+        'menu_name'          => 'Staff',
+        'add_new_item'       => 'Add New Staff Member',
+        'all_items'          => 'All Staff',
+        'edit_item'          => 'Edit Staff Member',
+        'view_item'          => 'View Staff Member',
+        'search_items'       => 'Search Staff',
+        'not_found'          => 'No staff found.',
+        'not_found_in_trash' => 'No staff found in Trash.',
+    ];
+    register_post_type( 'staff', [
+        'labels'             => $labels,
+        'public'             => true,
+        'has_archive'        => true,
+        'show_ui'            => true,
+        'show_in_rest'       => true,
+        'menu_icon'          => 'dashicons-id',
+        'rewrite'            => [ 'slug' => 'staff', 'with_front' => true ],
+        'supports'           => [ 'title', 'editor', 'thumbnail', 'custom-fields' ],
+    ] );
+});
+
+/**
+ * Register Testimonials CPT
+ */
+add_action( 'init', function() {
+    $labels = [
+        'name'               => 'Testimonials',
+        'singular_name'      => 'Testimonial',
+        'menu_name'          => 'Testimonials',
+        'add_new_item'       => 'Add New Testimonial',
+        'all_items'          => 'All Testimonials',
+        'edit_item'          => 'Edit Testimonial',
+        'view_item'          => 'View Testimonial',
+        'search_items'       => 'Search Testimonials',
+        'not_found'          => 'No testimonials found.',
+        'not_found_in_trash' => 'No testimonials found in Trash.',
+    ];
+    register_post_type( 'testimonial', [
+        'labels'             => $labels,
+        'public'             => true,
+        'has_archive'        => true,
+        'show_ui'            => true,
+        'show_in_rest'       => true,
+        'menu_icon'          => 'dashicons-format-quote',
+        'rewrite'            => [ 'slug' => 'testimonials', 'with_front' => true ],
+        'supports'           => [ 'title', 'editor', 'custom-fields' ],
+    ] );
+});
+
