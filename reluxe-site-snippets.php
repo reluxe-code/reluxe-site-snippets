@@ -58,6 +58,63 @@ add_action( 'init', function() {
 });
 
 /**
+ * Register Services CPT
+ */
+add_action( 'init', function() {
+    $labels = [
+        'name'               => 'Services',
+        'singular_name'      => 'Service',
+        'menu_name'          => 'Services',
+        'add_new_item'       => 'Add New Service',
+        'all_items'          => 'All Services',
+        'edit_item'          => 'Edit Service',
+        'view_item'          => 'View Service',
+        'search_items'       => 'Search Services',
+        'not_found'          => 'No services found.',
+        'not_found_in_trash' => 'No services found in Trash.',
+    ];
+    $args = [
+        'labels'             => $labels,
+        'public'             => true,
+        'has_archive'        => true,
+        'show_ui'            => true,
+        'show_in_rest'       => true,
+        'menu_icon'          => 'dashicons-hammer',   // choose any Dashicon
+        'rewrite'            => ['slug'=>'services','with_front'=>true],
+        'supports'           => ['title','editor','excerpt','thumbnail','custom-fields'],
+    ];
+    register_post_type( 'service', $args );
+});
+
+/**
+ * Register Service Category taxonomy
+ */
+add_action( 'init', function() {
+    $labels = [
+        'name'              => 'Service Categories',
+        'singular_name'     => 'Service Category',
+        'menu_name'         => 'Service Categories',
+        'all_items'         => 'All Categories',
+        'edit_item'         => 'Edit Category',
+        'view_item'         => 'View Category',
+        'update_item'       => 'Update Category',
+        'add_new_item'      => 'Add New Category',
+        'new_item_name'     => 'New Category Name',
+        'search_items'      => 'Search Categories',
+        'not_found'         => 'No categories found.',
+    ];
+    $args = [
+        'labels'            => $labels,
+        'hierarchical'      => true,
+        'public'            => true,
+        'show_ui'           => true,
+        'show_in_rest'      => true,
+        'rewrite'           => ['slug'=>'service-category','with_front'=>true],
+    ];
+    register_taxonomy( 'service_category', 'service', $args );
+});
+
+/**
  * Register Staff CPT
  */
 add_action( 'init', function() {
