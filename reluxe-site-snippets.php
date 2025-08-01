@@ -2,17 +2,20 @@
 /**
  * Plugin Name:       RELUXE Site Snippets
  * Plugin URI:        https://reluxemedspa.com
- * Description:       Custom functionality (Locations CPT, shortcodes, etc.) for RELUXE.
- * Version:           1.0.0
+ * Description:       Custom functionality (Locations CPT, Services CPT, Service Category taxonomy, Staff CPT, Testimonials CPT, Monthly Specials CPT, and Applicable Locations relationship field) for RELUXE.
+ * Version:           1.0.1
  * Author:            Kyle Robbins
  * Author URI:        https://reluxemedspa.com
  */
 
- // Exit if accessed directly
- if ( ! defined( 'ABSPATH' ) ) {
-     exit;
- }
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
+/**
+ * Register Locations CPT
+ */
 add_action( 'init', function() {
     $labels = [
         'name'                  => 'Locations',
@@ -32,7 +35,7 @@ add_action( 'init', function() {
     $args = [
         'labels'             => $labels,
         'public'             => true,
-        'has_archive'        => true,            // enables /locations/ archive
+        'has_archive'        => true,
         'show_ui'            => true,
         'show_in_menu'       => true,
         'menu_icon'          => 'dashicons-location',
@@ -51,7 +54,7 @@ add_action( 'init', function() {
             'editor',
             'excerpt',
             'custom-fields',
-            'thumbnail',    // featured image
+            'thumbnail',
         ],
     ];
     register_post_type( 'locations', $args );
@@ -79,9 +82,9 @@ add_action( 'init', function() {
         'has_archive'        => true,
         'show_ui'            => true,
         'show_in_rest'       => true,
-        'menu_icon'          => 'dashicons-hammer',   // choose any Dashicon
-        'rewrite'            => ['slug'=>'services','with_front'=>true],
-        'supports'           => ['title','editor','excerpt','thumbnail','custom-fields'],
+        'menu_icon'          => 'dashicons-hammer',
+        'rewrite'            => [ 'slug' => 'services', 'with_front' => true ],
+        'supports'           => [ 'title', 'editor', 'excerpt', 'thumbnail', 'custom-fields' ],
     ];
     register_post_type( 'service', $args );
 });
@@ -109,7 +112,7 @@ add_action( 'init', function() {
         'public'            => true,
         'show_ui'           => true,
         'show_in_rest'      => true,
-        'rewrite'           => ['slug'=>'service-category','with_front'=>true],
+        'rewrite'           => [ 'slug' => 'service-category', 'with_front' => true ],
     ];
     register_taxonomy( 'service_category', 'service', $args );
 });
@@ -198,3 +201,62 @@ add_action( 'init', function() {
     ] );
 });
 
+// --------------------------------------------------
+// ACF Relationship Field: Applicable Locations
+// --------------------------------------------------
+if ( function_exists( 'acf_add_local_field_group' ) ) {
+
+    acf_add_local_field_group( array(
+        'key'      => 'group_applicable_locations',
+        'title'    => 'Applicable Locations',
+        'fields'   => array(
+            array(
+                'key'               => 'field_applicable_locations',
+                'label'             => 'Applicable Locations',
+                'name'              => 'applicable_locations',
+                'type'              => 'relationship',
+                'instructions'      => 'Select one or more locations where this applies.',
+                'required'          => 0,
+                'post_type'         => array( 'locations' ),
+                'filters'           => array( 'search' ),
+                'return_format'     => 'object',
+            ),
+        ),
+        'location' => array(
+            array(
+                array(
+                    'param'    => 'post_type',
+                    'operator' => '==',
+                    'value'    => 'staff',
+                ),
+            ),
+            array(
+                array(
+                    'param'    => 'post_type',
+                    'operator' => '==',
+                    'value'    => 'service',
+                ),
+            ),
+            array(
+                array(
+                    'param'    => 'post_type',
+                    'operator' => '==',
+                    'value'    => 'testimonial',
+                ),
+            ),
+            array(
+                array(
+                    'param'    => 'post_type',
+                    'operator' => '==',
+                    'value'    => 'monthly_special',
+                ),
+            ),
+        ),
+        'position'              => 'normal',
+        'style'                 => 'default',
+        'label_placement'       => 'top',
+        'instruction_placement' => 'label',
+        'active'                => true,
+        'description'           => '',
+    ) );
+}
