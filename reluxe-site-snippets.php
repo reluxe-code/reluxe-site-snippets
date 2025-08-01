@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       RELUXE Site Snippets
  * Plugin URI:        https://reluxemedspa.com
- * Description:       Custom functionality for RELUXE: Locations CPT, Services CPT, Service Category, Staff CPT, Testimonials CPT, Monthly Specials CPT, Applicable Locations relationship field, and Homepage Sections ACF group.
+ * Description:       Custom functionality for RELUXE: CPTs, ACF groups, and relationship fields.
  * Version:           1.1.0
  * Author:            Kyle Robbins
  * Author URI:        https://reluxemedspa.com
@@ -14,25 +14,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Register Locations CPT
+ * Register Custom Post Types
  */
 add_action( 'init', function() {
+    // Locations CPT
     $labels = [
-        'name'                  => 'Locations',
-        'singular_name'         => 'Location',
-        'menu_name'             => 'Locations',
-        'name_admin_bar'        => 'Location',
-        'add_new'               => 'Add New',
-        'add_new_item'          => 'Add New Location',
-        'new_item'              => 'New Location',
-        'edit_item'             => 'Edit Location',
-        'view_item'             => 'View Location',
-        'all_items'             => 'All Locations',
-        'search_items'          => 'Search Locations',
-        'not_found'             => 'No locations found.',
-        'not_found_in_trash'    => 'No locations found in Trash.',
+        'name'               => 'Locations',
+        'singular_name'      => 'Location',
+        'menu_name'          => 'Locations',
+        'add_new_item'       => 'Add New Location',
+        'all_items'          => 'All Locations',
+        'edit_item'          => 'Edit Location',
+        'view_item'          => 'View Location',
+        'search_items'       => 'Search Locations',
+        'not_found'          => 'No locations found.',
+        'not_found_in_trash' => 'No locations found in Trash.',
     ];
-    $args = [
+    register_post_type( 'locations', [
         'labels'             => $labels,
         'public'             => true,
         'has_archive'        => true,
@@ -40,24 +38,11 @@ add_action( 'init', function() {
         'show_in_menu'       => true,
         'menu_icon'          => 'dashicons-location',
         'show_in_rest'       => true,
-        'publicly_queryable' => true,
-        'exclude_from_search'=> false,
-        'capability_type'    => 'post',
-        'hierarchical'       => false,
-        'rewrite'            => [
-            'slug'       => 'locations',
-            'with_front' => true,
-        ],
-        'query_var'          => true,
-        'supports'           => [ 'title','editor','excerpt','custom-fields','thumbnail' ],
-    ];
-    register_post_type( 'locations', $args );
-});
+        'rewrite'            => ['slug'=>'locations','with_front'=>true],
+        'supports'           => ['title','editor','excerpt','thumbnail','custom-fields'],
+    ] );
 
-/**
- * Register Services CPT
- */
-add_action( 'init', function() {
+    // Services CPT
     $labels = [
         'name'               => 'Services',
         'singular_name'      => 'Service',
@@ -70,7 +55,7 @@ add_action( 'init', function() {
         'not_found'          => 'No services found.',
         'not_found_in_trash' => 'No services found in Trash.',
     ];
-    $args = [
+    register_post_type( 'service', [
         'labels'             => $labels,
         'public'             => true,
         'has_archive'        => true,
@@ -79,42 +64,32 @@ add_action( 'init', function() {
         'menu_icon'          => 'dashicons-hammer',
         'rewrite'            => ['slug'=>'services','with_front'=>true],
         'supports'           => ['title','editor','excerpt','thumbnail','custom-fields'],
-    ];
-    register_post_type( 'service', $args );
-});
+    ] );
 
-/**
- * Register Service Category taxonomy
- */
-add_action( 'init', function() {
+    // Service Category Taxonomy
     $labels = [
-        'name'              => 'Service Categories',
-        'singular_name'     => 'Service Category',
-        'menu_name'         => 'Service Categories',
-        'all_items'         => 'All Categories',
-        'edit_item'         => 'Edit Category',
-        'view_item'         => 'View Category',
-        'update_item'       => 'Update Category',
-        'add_new_item'      => 'Add New Category',
-        'new_item_name'     => 'New Category Name',
-        'search_items'      => 'Search Categories',
-        'not_found'         => 'No categories found.',
+        'name'               => 'Service Categories',
+        'singular_name'      => 'Service Category',
+        'menu_name'          => 'Service Categories',
+        'all_items'          => 'All Categories',
+        'edit_item'          => 'Edit Category',
+        'view_item'          => 'View Category',
+        'update_item'        => 'Update Category',
+        'add_new_item'       => 'Add New Category',
+        'new_item_name'      => 'New Category Name',
+        'search_items'       => 'Search Categories',
+        'not_found'          => 'No categories found.',
     ];
-    $args = [
-        'labels'            => $labels,
-        'hierarchical'      => true,
-        'public'            => true,
-        'show_ui'           => true,
-        'show_in_rest'      => true,
-        'rewrite'           => ['slug'=>'service-category','with_front'=>true],
-    ];
-    register_taxonomy( 'service_category', 'service', $args );
-});
+    register_taxonomy( 'service_category', 'service', [
+        'labels'       => $labels,
+        'public'       => true,
+        'hierarchical' => true,
+        'show_ui'      => true,
+        'show_in_rest' => true,
+        'rewrite'      => ['slug'=>'service-category','with_front'=>true],
+    ] );
 
-/**
- * Register Staff CPT
- */
-add_action( 'init', function() {
+    // Staff CPT
     $labels = [
         'name'               => 'Staff',
         'singular_name'      => 'Staff Member',
@@ -128,21 +103,17 @@ add_action( 'init', function() {
         'not_found_in_trash' => 'No staff found in Trash.',
     ];
     register_post_type( 'staff', [
-        'labels'             => $labels,
-        'public'             => true,
-        'has_archive'        => true,
-        'show_ui'            => true,
-        'show_in_rest'       => true,
-        'menu_icon'          => 'dashicons-id',
-        'rewrite'            => ['slug'=>'staff','with_front'=>true],
-        'supports'           => ['title','editor','thumbnail','custom-fields'],
+        'labels'       => $labels,
+        'public'       => true,
+        'has_archive'  => true,
+        'show_ui'      => true,
+        'show_in_rest' => true,
+        'menu_icon'    => 'dashicons-id',
+        'rewrite'      => ['slug'=>'staff','with_front'=>true],
+        'supports'     => ['title','editor','thumbnail','custom-fields'],
     ] );
-});
 
-/**
- * Register Testimonials CPT
- */
-add_action( 'init', function() {
+    // Testimonials CPT
     $labels = [
         'name'               => 'Testimonials',
         'singular_name'      => 'Testimonial',
@@ -156,21 +127,17 @@ add_action( 'init', function() {
         'not_found_in_trash' => 'No testimonials found in Trash.',
     ];
     register_post_type( 'testimonial', [
-        'labels'             => $labels,
-        'public'             => true,
-        'has_archive'        => true,
-        'show_ui'            => true,
-        'show_in_rest'       => true,
-        'menu_icon'          => 'dashicons-format-quote',
-        'rewrite'            => ['slug'=>'testimonials','with_front'=>true],
-        'supports'           => ['title','editor','custom-fields'],
+        'labels'       => $labels,
+        'public'       => true,
+        'has_archive'  => true,
+        'show_ui'      => true,
+        'show_in_rest' => true,
+        'menu_icon'    => 'dashicons-format-quote',
+        'rewrite'      => ['slug'=>'testimonials','with_front'=>true],
+        'supports'     => ['title','editor','custom-fields'],
     ] );
-});
 
-/**
- * Register Monthly Specials CPT
- */
-add_action( 'init', function() {
+    // Monthly Specials CPT
     $labels = [
         'name'               => 'Monthly Specials',
         'singular_name'      => 'Monthly Special',
@@ -184,25 +151,25 @@ add_action( 'init', function() {
         'not_found_in_trash' => 'No specials found in Trash.',
     ];
     register_post_type( 'monthly_special', [
-        'labels'             => $labels,
-        'public'             => true,
-        'has_archive'        => true,
-        'show_ui'            => true,
-        'show_in_rest'       => true,
-        'menu_icon'          => 'dashicons-star-filled',
-        'rewrite'            => ['slug'=>'monthly-specials','with_front'=>true],
-        'supports'           => ['title','editor','excerpt','thumbnail','custom-fields'],
+        'labels'       => $labels,
+        'public'       => true,
+        'has_archive'  => true,
+        'show_ui'      => true,
+        'show_in_rest' => true,
+        'menu_icon'    => 'dashicons-star-filled',
+        'rewrite'      => ['slug'=>'monthly-specials','with_front'=>true],
+        'supports'     => ['title','editor','excerpt','thumbnail','custom-fields'],
     ] );
 });
 
 /**
- * Add Applicable Locations ACF relationship field to CPTs
+ * ACF: Applicable Locations relationship field
  */
-if ( function_exists( 'acf_add_local_field_group' ) ) {
-    acf_add_local_field_group( array(
-        'key'      => 'group_applicable_locations',
-        'title'    => 'Applicable Locations',
-        'fields'   => array(
+if ( function_exists('acf_add_local_field_group') ) {
+    acf_add_local_field_group(array(
+        'key'    => 'group_applicable_locations',
+        'title'  => 'Applicable Locations',
+        'fields' => array(
             array(
                 'key'           => 'field_applicable_locations',
                 'label'         => 'Applicable Locations',
@@ -214,42 +181,156 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
             ),
         ),
         'location' => array(
-            array(array('param'=>'post_type','operator'=>'==','value'=>'staff')),  
             array(array('param'=>'post_type','operator'=>'==','value'=>'service')),
+            array(array('param'=>'post_type','operator'=>'==','value'=>'staff')),
             array(array('param'=>'post_type','operator'=>'==','value'=>'testimonial')),
             array(array('param'=>'post_type','operator'=>'==','value'=>'monthly_special')),
         ),
         'position' => 'normal',
         'style'    => 'default',
         'active'   => true,
-    ) );
+    ));
 }
 
 /**
- * Homepage Sections ACF Flexible Content
+ * ACF: Homepage Sections flexible content
  */
-if ( function_exists( 'acf_add_local_field_group' ) ):
-acf_add_local_field_group(array(
-  'key'      => 'group_homepage_sections',
-  'title'    => 'Homepage Sections',
-  'fields'   => array(
-    array(
-      'key'               => 'field_homepage_sections',
-      'label'             => 'Sections',
-      'name'              => 'homepage_sections',
-      'type'              => 'flexible_content',
-      'layouts'           => array(
-        'layout_hero' => array(...), // see detailed code above
-        // include all layouts as previously defined
-      ),
-  ),
-  'location' => array(
-    array(array('param'=>'page_type','operator'=>'==','value'=>'front_page')),
-  ),
-  'style'                 => 'seamless',
-  'position'              => 'normal',
-  'label_placement'       => 'top',
-  'instruction_placement' => 'label',
-  'active'                => true,
-));
-endif;
+if ( function_exists('acf_add_local_field_group') ) {
+    acf_add_local_field_group(array(
+        'key'      => 'group_homepage_sections',
+        'title'    => 'Homepage Sections',
+        'fields'   => array(
+            array(
+                'key'           => 'field_homepage_sections',
+                'label'         => 'Sections',
+                'name'          => 'homepage_sections',
+                'type'          => 'flexible_content',
+                'layouts'       => array(
+                    // Hero
+                    'layout_hero' => array(
+                        'key'        => 'layout_hero',
+                        'name'       => 'hero',
+                        'label'      => 'Hero',
+                        'display'    => 'block',
+                        'sub_fields' => array(
+                            array('key'=>'field_hero_headline','label'=>'Headline','name'=>'headline','type'=>'text'),
+                            array('key'=>'field_hero_subhead','label'=>'Subheading','name'=>'subhead','type'=>'text'),
+                            array('key'=>'field_hero_background','label'=>'Background Image','name'=>'background_image','type'=>'image'),
+                            array('key'=>'field_hero_cta_text','label'=>'Button Text','name'=>'cta_text','type'=>'text'),
+                            array('key'=>'field_hero_cta_url','label'=>'Button URL','name'=>'cta_url','type'=>'url'),
+                        ),
+                    ),
+                    // Locations
+                    'layout_locations' => array(
+                        'key'        => 'layout_locations',
+                        'name'       => 'locations',
+                        'label'      => 'Locations',
+                        'display'    => 'block',
+                        'sub_fields' => array(
+                            array(
+                                'key'=>'field_locations_list','label'=>'Select Locations','name'=>'locations','type'=>'relationship',
+                                'post_type'=>array('locations'),'return_format'=>'object',
+                            ),
+                        ),
+                    ),
+                    // Staff
+                    'layout_staff' => array(
+                        'key'        => 'layout_staff',
+                        'name'       => 'staff',
+                        'label'      => 'Staff Carousel',
+                        'display'    => 'block',
+                        'sub_fields' => array(
+                            array(
+                                'key'=>'field_staff_list','label'=>'Select Staff','name'=>'staff_members','type'=>'relationship',
+                                'post_type'=>array('staff'),'return_format'=>'object','filters'=>array('search'),'max'=>6,
+                            ),
+                        ),
+                    ),
+                    // Reviews
+                    'layout_reviews' => array(
+                        'key'        => 'layout_reviews',
+                        'name'       => 'reviews',
+                        'label'      => 'Google Reviews',
+                        'display'    => 'block',
+                        'sub_fields' => array(
+                            array('key'=>'field_reviews_shortcode','label'=>'Reviews Shortcode','name'=>'reviews_shortcode','type'=>'text'),
+                        ),
+                    ),
+                    // Testimonials
+                    'layout_testimonials' => array(
+                        'key'        => 'layout_testimonials',
+                        'name'       => 'testimonials',
+                        'label'      => 'Testimonials',
+                        'display'    => 'block',
+                        'sub_fields' => array(
+                            array(
+                                'key'=>'field_testimonials_list','label'=>'Select Testimonials','name'=>'testimonials','type'=>'relationship',
+                                'post_type'=>array('testimonial'),'return_format'=>'object','max'=>5,
+                            ),
+                        ),
+                    ),
+                    // Featured Services
+                    'layout_services' => array(
+                        'key'        => 'layout_services',
+                        'name'       => 'featured_services',
+                        'label'      => 'Featured Services',
+                        'display'    => 'block',
+                        'sub_fields' => array(
+                            array(
+                                'key'=>'field_services_list','label'=>'Select Services','name'=>'services','type'=>'relationship',
+                                'post_type'=>array('service'),'return_format'=>'object','filters'=>array('search'),'max'=>6,
+                            ),
+                        ),
+                    ),
+                    // Monthly Specials
+                    'layout_specials' => array(
+                        'key'        => 'layout_specials',
+                        'name'       => 'monthly_specials',
+                        'label'      => 'Monthly Specials',
+                        'display'    => 'block',
+                        'sub_fields' => array(
+                            array(
+                                'key'=>'field_specials_list','label'=>'Select Specials','name'=>'specials','type'=>'relationship',
+                                'post_type'=>array('monthly_special'),'return_format'=>'object','max'=>3,
+                            ),
+                        ),
+                    ),
+                    // Skincare Lines
+                    'layout_skincare' => array(
+                        'key'        => 'layout_skincare',
+                        'name'       => 'skincare_lines',
+                        'label'      => 'Skincare Lines',
+                        'display'    => 'block',
+                        'sub_fields' => array(
+                            array(
+                                'key'=>'field_skincare_list','label'=>'Select Brands','name'=>'skincare_brands','type'=>'relationship',
+                                'post_type'=>array('skincare_line'),'return_format'=>'object','max'=>8,
+                            ),
+                        ),
+                    ),
+                    // CTA
+                    'layout_cta' => array(
+                        'key'        => 'layout_cta',
+                        'name'       => 'cta',
+                        'label'      => 'Call To Action',
+                        'display'    => 'block',
+                        'sub_fields' => array(
+                            array('key'=>'field_cta_heading','label'=>'Heading','name'=>'cta_heading','type'=>'text'),
+                            array('key'=>'field_cta_text','label'=>'Text','name'=>'cta_text','type'=>'textarea'),
+                            array('key'=>'field_cta_button_text','label'=>'Button Text','name'=>'cta_button_text','type'=>'text'),
+                            array('key'=>'field_cta_button_url','label'=>'Button URL','name'=>'cta_button_url','type'=>'url'),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+        'location' => array(
+            array(array('param'=>'page_type','operator'=>'==','value'=>'front_page')),  
+        ),
+        'style'                 => 'seamless',
+        'position'              => 'normal',
+        'label_placement'       => 'top',
+        'instruction_placement' => 'label',
+        'active'                => true,
+    ));
+}
