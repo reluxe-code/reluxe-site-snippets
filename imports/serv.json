@@ -1,0 +1,103 @@
+\[
+{
+"key": "group\_service\_fields",
+"title": "Service Fields",
+"fields": \[
+{
+"key": "field\_service\_summary",
+"label": "Service Summary",
+"name": "service\_summary",
+"type": "textarea",
+"instructions": "A brief description of the service.",
+"required": 0,
+"rows": 4,
+"new\_lines": "wpautop"
+},
+{
+"key": "field\_service\_icon",
+"label": "Service Icon",
+"name": "service\_icon",
+"type": "image",
+"instructions": "Upload an icon or graphic for this service.",
+"return\_format": "array",
+"preview\_size": "thumbnail"
+},
+{
+"key": "field\_service\_duration",
+"label": "Duration",
+"name": "service\_duration",
+"type": "text",
+"instructions": "e.g. 30 minutes, 1 hour, etc.",
+"wrapper": {"width": "33"}
+},
+{
+"key": "field\_service\_price",
+"label": "Starting Price",
+"name": "service\_price",
+"type": "text",
+"instructions": "e.g. \$150+",
+"wrapper": {"width": "33"}
+},
+{
+"key": "field\_price\_tiers",
+"label": "Price Tiers",
+"name": "price\_tiers",
+"type": "repeater",
+"instructions": "Define multiple packages with name, price, and description.",
+"sub\_fields": \[
+{"key":"field\_tier\_name","label":"Tier Name","name":"tier\_name","type":"text"},
+{"key":"field\_tier\_price","label":"Tier Price","name":"tier\_price","type":"text"},
+{"key":"field\_tier\_desc","label":"Tier Description","name":"tier\_description","type":"textarea","rows":3}
+]
+},
+{
+"key": "field\_before\_after\_gallery",
+"label": "Before & After Gallery",
+"name": "before\_after\_gallery",
+"type": "gallery",
+"instructions": "Upload photos showcasing before/after results.",
+"preview\_size": "medium"
+},
+{
+"key": "field\_faqs",
+"label": "FAQs",
+"name": "faqs",
+"type": "repeater",
+"instructions": "List frequently asked questions.",
+"sub\_fields": \[
+{"key":"field\_faq\_q","label":"Question","name":"question","type":"text"},
+{"key":"field\_faq\_a","label":"Answer","name":"answer","type":"textarea","rows":3}
+]
+},
+{
+"key": "field\_booking\_link",
+"label": "Booking Link",
+"name": "booking\_link",
+"type": "url",
+"instructions": "Direct scheduler URL for this service.",
+"wrapper": {"width": "50"}
+},
+{
+"key": "field\_applicable\_locations",
+"label": "Applicable Locations",
+"name": "applicable\_locations",
+"type": "relationship",
+"instructions": "Select which locations offer this service.",
+"post\_type": \["locations"],
+"filters": \["search"],
+"return\_format": "object",
+"wrapper": {"width": "50"}
+}
+],
+"location": \[
+\[
+{"param": "post\_type","operator": "==","value": "service"}
+]
+],
+"style": "seamless",
+"position": "normal",
+"label\_placement": "top",
+"instruction\_placement": "label",
+"active": true
+}
+]
